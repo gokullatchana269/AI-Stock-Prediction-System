@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>AI Stock Prediction System</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+body{
+font-family:Arial;
+margin:0;
+background:#f4f6f9;
+}
+
+header{
+background:#111827;
+color:white;
+padding:20px;
+text-align:center;
+font-size:30px;
+font-weight:bold;
+}
+
+.container{
+width:90%;
+margin:auto;
+padding:20px;
+}
+
+.card{
+background:white;
+padding:20px;
+margin-top:20px;
+border-radius:10px;
+box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
+
+input,select,button{
+width:100%;
+padding:12px;
+margin-top:10px;
+font-size:16px;
+}
+
+button{
+background:#111827;
+color:white;
+border:none;
+cursor:pointer;
+border-radius:5px;
+}
+
+button:hover{
+background:#1f2937;
+}
+
+.result{
+font-size:22px;
+font-weight:bold;
+color:green;
+}
+
+.news-wrapper{
+overflow:hidden;
+background:#fff8dc;
+padding:10px;
+border-radius:10px;
+}
+
+.news-track{
+display:flex;
+width:max-content;
+animation:scrollNews 25s linear infinite;
+}
+
+.news-item{
+min-width:350px;
+margin-right:20px;
+padding:15px;
+background:white;
+border-left:5px solid orange;
+border-radius:5px;
+font-weight:bold;
+}
+
+@keyframes scrollNews{
+
+0%{
+transform:translateX(0);
+}
+
+100%{
+transform:translateX(-50%);
+}
+
+}
+
+.chatbox{
+height:220px;
+overflow-y:auto;
+border:1px solid #ccc;
+padding:10px;
+border-radius:5px;
+background:#fafafa;
+}
+
+.msg{
+margin:8px 0;
+}
+
+.user{
+color:blue;
+}
+
+.bot{
+color:green;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+📈 AI Stock Prediction System
+</header>
+
+<div class="container">
+
+<!-- STOCK SELECT -->
+<div class="card">
+
+<h2>📊 Select Stock</h2>
+
+<select id="stock">
+
+<option>Apple</option>
+<option>Tesla</option>
+<option>Infosys</option>
+<option>TCS</option>
+<option>Reliance</option>
+
+</select>
+
+<button onclick="predictStock()">
+Predict Stock
+</button>
+
+</div>
+
+<!-- RESULT -->
+<div class="card">
+
+<h2>🤖 AI Prediction Result</h2>
+
+<p id="price" class="result"></p>
+
+<p id="suggestion"></p>
+
+</div>
+
+<!-- GRAPH -->
+<div class="card">
+
+<h2>📈 Stock Graph</h2>
+
+<canvas id="chart"></canvas>
+
+</div>
+
+<!-- CHATBOT -->
+<div class="card">
+
+<h2>🤖 AI Chatbot</h2>
+
+<div class="chatbox" id="chatbox"></div>
+
+<input type="text"
+id="userInput"
+placeholder="Ask stock questions">
+
+<button onclick="sendMessage()">
+Send
+</button>
+
+</div>
+
+<!-- NEWS -->
+<div class="card">
+
+<h2>📰 Stock Market News</h2>
+
+<div class="news-wrapper">
+
+<div class="news-track">
+
+<div class="news-item">
+📈 Stock market rises due to strong earnings
+</div>
+
+<div class="news-item">
+💰 Investors buying technology stocks
+</div>
+
+<div class="news-item">
+🔥 Tesla shares gain momentum
+</div>
+
+<div class="news-item">
+📊 Analysts predict positive growth
+</div>
+
+<div class="news-item">
+🌍 Global market impacts stock prices
+</div>
+
+<!-- DUPLICATE -->
+
+<div class="news-item">
+📈 Stock market rises due to strong earnings
+</div>
+
+<div class="news-item">
+💰 Investors buying technology stocks
+</div>
+
+<div class="news-item">
+🔥 Tesla shares gain momentum
+</div>
+
+<div class="news-item">
+📊 Analysts predict positive growth
+</div>
+
+<div class="news-item">
+🌍 Global market impacts stock prices
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+let chart;
+
+// STOCK PREDICTION
+function predictStock(){
+
+let stock =
+document.getElementById("stock").value;
+
+let predicted =
+Math.floor(Math.random()*1000)+1000;
+
+document.getElementById("price").innerText =
+stock + " Predicted Price : ₹ " + predicted;
+
+let suggestion = "";
+
+if(predicted > 1500){
+
+suggestion = "✅ Suggestion : BUY";
+
+}
+else{
+
+suggestion = "⚠ Suggestion : HOLD";
+
+}
+
+document.getElementById("suggestion").innerText =
+suggestion;
+
+drawChart(stock);
+
+}
+
+// CHART
+function drawChart(stock){
+
+let labels =
+["Mon","Tue","Wed","Thu","Fri"];
+
+let data =
+Array.from({length:5},
+()=>Math.floor(Math.random()*1000)+1000);
+
+if(chart){
+chart.destroy();
+}
+
+chart = new Chart(
+document.getElementById("chart"),
+
+{
+
+type:"line",
+
+data:{
+
+labels:labels,
+
+datasets:[{
+
+label:stock + " Price",
+
+data:data,
+
+borderColor:"blue",
+
+fill:false
+
+}]
+
+}
+
+});
+
+}
+
+// CHATBOT
+function sendMessage(){
+
+let input =
+document.getElementById("userInput")
+.value.toLowerCase();
+
+let chatbox =
+document.getElementById("chatbox");
+
+chatbox.innerHTML +=
+`<div class='msg user'>
+You : ${input}
+</div>`;
+
+let reply =
+"I didn't understand 😅";
+
+if(input.includes("stock")){
+
+reply =
+"Stocks represent ownership in companies.";
+
+}
+
+else if(input.includes("buy")){
+
+reply =
+"Buy stocks after proper market analysis.";
+
+}
+
+else if(input.includes("tesla")){
+
+reply =
+"Tesla is popular for electric vehicles.";
+
+}
+
+else if(input.includes("apple")){
+
+reply =
+"Apple is a leading technology company.";
+
+}
+
+chatbox.innerHTML +=
+`<div class='msg bot'>
+Bot : ${reply}
+</div>`;
+
+document.getElementById("userInput").value = "";
+
+chatbox.scrollTop =
+chatbox.scrollHeight;
+
+}
+
+</script>
+
+</body>
+</html>
